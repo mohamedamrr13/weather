@@ -6,7 +6,7 @@ class WeatherModel {
   final double maxTemp;
   final double minTemp;
   final String weatherState;
-  final String Image;
+  final String image;
 
   WeatherModel(
       {required this.date,
@@ -14,7 +14,7 @@ class WeatherModel {
       required this.maxTemp,
       required this.minTemp,
       required this.weatherState,
-      required this.Image});
+      required this.image});
 
   factory WeatherModel.fromJson(dynamic data) {
     var jsonData = data['forecast']['forecastday'][0]['day'];
@@ -24,7 +24,7 @@ class WeatherModel {
         maxTemp: jsonData['maxtemp_c'],
         minTemp: jsonData['mintemp_c'],
         weatherState: jsonData['condition']['text'],
-        Image: jsonData['condition']['icon']);
+        image: jsonData['condition']['icon']);
   }
   @override
   String toString() {

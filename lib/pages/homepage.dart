@@ -5,23 +5,29 @@ import 'package:weather/cubits/weatherstates.dart';
 import 'package:weather/pages/searchpage.dart';
 import '../models/weathermodel.dart';
 
-// ignore: must_be_immutable
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
-class HomePage extends StatelessWidget {
-  HomePage();
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   WeatherModel? weatherModel;
+
   String? cityName;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: const Color.fromARGB(255, 40, 47, 60),
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 29, 35, 44),
+          backgroundColor: weatherModel?.getThemeColor() ?? Colors.grey,
           actions: [
             IconButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return SearchPage();
+                    return const SearchPage();
                   }));
                 },
                 icon: const Icon(Icons.search))
@@ -34,7 +40,7 @@ class HomePage extends StatelessWidget {
         body:
             BlocBuilder<WeatherCubit, WeatherStates>(builder: (context, state) {
           if (state is WeatherLoadingState) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: const CircularProgressIndicator());
           } else if (state is WeatherSuccessState) {
             weatherModel = BlocProvider.of<WeatherCubit>(context).weatherModel;
             return Scaffold(
@@ -95,7 +101,7 @@ class HomePage extends StatelessWidget {
                   ),
                 ));
           } else if (state is WeatherFailureState) {
-            return Scaffold(
+            return const Scaffold(
               body: Text('There is an error'),
             );
           } else {
