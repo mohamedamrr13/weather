@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather/cubits/weathercubit.dart';
 import 'package:weather/cubits/weatherstates.dart';
-import 'package:weather/pages/searchpage.dart';
 import '../models/weathermodel.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,7 +13,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   WeatherModel? weatherModel;
-
   String? cityName;
 
   @override
@@ -23,15 +21,6 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: const Color.fromARGB(255, 40, 47, 60),
         appBar: AppBar(
           backgroundColor: weatherModel?.getThemeColor() ?? Colors.grey,
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return const SearchPage();
-                  }));
-                },
-                icon: const Icon(Icons.search))
-          ],
           title: const Text(
             'Weather App',
             style: TextStyle(color: Colors.white),
@@ -40,7 +29,7 @@ class _HomePageState extends State<HomePage> {
         body:
             BlocBuilder<WeatherCubit, WeatherStates>(builder: (context, state) {
           if (state is WeatherLoadingState) {
-            return const Center(child: const CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (state is WeatherSuccessState) {
             weatherModel = BlocProvider.of<WeatherCubit>(context).weatherModel;
             return Scaffold(
@@ -110,11 +99,11 @@ class _HomePageState extends State<HomePage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'There is no weather',
+                    'Something Went Wrong',
                     style: TextStyle(fontSize: 25, color: Colors.white),
                   ),
                   Text(
-                    'Start searching now 🔍',
+                    'Please Try Again',
                     style: TextStyle(fontSize: 25, color: Colors.white),
                   )
                 ],
