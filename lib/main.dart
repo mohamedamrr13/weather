@@ -18,14 +18,14 @@ class Weather extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: const HomePage(),
-        theme: ThemeData(
-            primarySwatch:
-                BlocProvider.of<WeatherCubit>(context).weatherModel == null
-                    ? Colors.blue
-                    : BlocProvider.of<WeatherCubit>(context)
-                        .weatherModel!
-                        .getThemeColor()));
+      debugShowCheckedModeBanner: false,
+      title: 'Modern Weather App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        fontFamily: 'SF Pro Display',
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: const HomePage(),
+    );
   }
 }
