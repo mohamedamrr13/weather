@@ -1,4 +1,4 @@
-# weather
+# Modern Weather App
 
 A new Flutter project.
 
