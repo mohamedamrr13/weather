@@ -7,7 +7,7 @@ import 'package:weather/services/weather_service.dart';
 void main() {
   runApp(BlocProvider<WeatherCubit>(
       create: (context) {
-        return WeatherCubit(WeatherService());
+        return WeatherCubit(WeatherService())..getWeather();
       },
       child: const Weather()));
 }
