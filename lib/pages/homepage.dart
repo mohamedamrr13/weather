@@ -144,6 +144,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         border: Border.all(color: Colors.white.withOpacity(0.3)),
       ),
       child: TextField(
+        cursorColor: Colors.grey,
         controller: _searchTextController,
         focusNode: _searchFocusNode,
         style: const TextStyle(color: Colors.white, fontSize: 16),
@@ -341,9 +342,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         if (_searchAnimation.value == 0) return const SizedBox.shrink();
 
         return Positioned.fill(
-          top: kToolbarHeight + MediaQuery.of(context).padding.top - 45,
-          child: Container(
-            color: Colors.black.withOpacity(0.3 * _searchAnimation.value),
+          top: kToolbarHeight + MediaQuery.of(context).padding.top - 70,
+          child: SizedBox(
             child: SingleChildScrollView(
               child: Container(
                 margin: const EdgeInsets.all(16),
@@ -507,7 +507,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 child: Column(
                   children: [
                     _buildWeatherDetails(),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 12),
                     _buildAstronomicalInfo(),
                     const SizedBox(height: 24),
                     _buildLastUpdated(),

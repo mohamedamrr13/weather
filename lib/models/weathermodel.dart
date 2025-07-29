@@ -133,9 +133,10 @@ class WeatherModel {
         ];
       } else {
         return [
-          const Color(0xFF87CEEB), // Sky Blue
-          const Color(0xFF64B5F6), // Light Blue
           const Color(0xFF42A5F5), // Blue
+          const Color(0xFF64B5F6), // Light Blue
+
+          const Color(0xFF87CEEB), // Sky Blue
         ];
       }
     } else if (condition.contains('cloud') || condition.contains('overcast')) {
@@ -156,9 +157,10 @@ class WeatherModel {
         condition.contains('sleet') ||
         condition.contains('blizzard')) {
       return [
-        const Color(0xFFE0F2F7), // Light Cyan
-        const Color(0xFFB2EBF2), // Cyan Light
         const Color(0xFF80DEEA), // Cyan
+        const Color(0xFFB2EBF2), // Cyan Light
+
+        const Color(0xFFE0F2F7), // Light Cyan
       ];
     } else if (condition.contains('thunder') || condition.contains('storm')) {
       return [
@@ -168,9 +170,9 @@ class WeatherModel {
       ];
     } else if (condition.contains('mist') || condition.contains('fog')) {
       return [
-        const Color(0xFFBDBDBD), // Grey 400
-        const Color(0xFFE0E0E0), // Grey 300
-        const Color(0xFFF5F5F5), // Grey 100
+        const Color.fromARGB(255, 83, 83, 83), // Grey 400
+        const Color.fromARGB(255, 154, 154, 154), // Grey 300
+        const Color.fromARGB(255, 181, 180, 180), // Grey 100
       ];
     }
 
