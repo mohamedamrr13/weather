@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather/cubits/weathercubit.dart';
-import 'package:weather/pages/homepage.dart';
 import 'package:weather/services/weather_service.dart';
+
+import 'home_page.dart';
 
 void main() {
   runApp(BlocProvider<WeatherCubit>(
