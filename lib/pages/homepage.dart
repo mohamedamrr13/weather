@@ -82,122 +82,122 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   void _generateSearchSuggestions(String query) {
-  final popularCities = [
-  // Your original list
-  'Alexandria',
-  'New York',
-  'London',
-  'Tokyo',
-  'Paris',
-  'Sydney',
-  'Berlin',
-  'Dubai',
-  'Singapore',
-  'Mumbai',
-  'Cairo',
-  'Rome',
-  'Madrid',
-  'Barcelona',
-  'Amsterdam',
-  'Vienna',
-  'Prague',
-  'Istanbul',
-  'Bangkok',
-  'Seoul',
-  'Melbourne',
-  'Toronto',
-  'Vancouver',
-  'Montreal',
-  'Los Angeles',
-  'San Francisco',
-  'Chicago',
-  'Miami',
-  'Las Vegas',
-  'Boston',
-  'Seattle',
-  'Washington DC',
+    final popularCities = [
+      // Your original list
+      'Alexandria',
+      'New York',
+      'London',
+      'Tokyo',
+      'Paris',
+      'Sydney',
+      'Berlin',
+      'Dubai',
+      'Singapore',
+      'Mumbai',
+      'Cairo',
+      'Rome',
+      'Madrid',
+      'Barcelona',
+      'Amsterdam',
+      'Vienna',
+      'Prague',
+      'Istanbul',
+      'Bangkok',
+      'Seoul',
+      'Melbourne',
+      'Toronto',
+      'Vancouver',
+      'Montreal',
+      'Los Angeles',
+      'San Francisco',
+      'Chicago',
+      'Miami',
+      'Las Vegas',
+      'Boston',
+      'Seattle',
+      'Washington DC',
 
-  // Additional popular cities
-  'Doha',
-  'Abu Dhabi',
-  'Riyadh',
-  'Jeddah',
-  'Kuwait City',
-  'Manila',
-  'Jakarta',
-  'Hanoi',
-  'Taipei',
-  'Beijing',
-  'Shanghai',
-  'Hong Kong',
-  'New Delhi',
-  'Bangalore',
-  'Chennai',
-  'Hyderabad',
-  'Karachi',
-  'Lahore',
-  'Tehran',
-  'Cape Town',
-  'Johannesburg',
-  'Nairobi',
-  'Lagos',
-  'Casablanca',
-  'Addis Ababa',
-  'Tunis',
-  'Algiers',
-  'Sao Paulo',
-  'Rio de Janeiro',
-  'Buenos Aires',
-  'Lima',
-  'Bogotá',
-  'Santiago',
-  'Mexico City',
-  'Panama City',
-  'San Juan',
-  'Reykjavik',
-  'Helsinki',
-  'Oslo',
-  'Copenhagen',
-  'Stockholm',
-  'Zurich',
-  'Geneva',
-  'Brussels',
-  'Lisbon',
-  'Warsaw',
-  'Budapest',
-  'Athens',
-  'Florence',
-  'Venice',
-  'Valencia',
-  'Porto',
-  'Kiev',
-  'Moscow',
-  'Saint Petersburg',
-  'Tbilisi',
-  'Baku',
-  'Yerevan',
-  'Tashkent',
-  'Astana',
-  'Auckland',
-  'Wellington',
-  'Perth',
-  'Brisbane',
-  'Calgary',
-  'Ottawa',
-  'Edmonton',
-  'Quebec City',
-  'Philadelphia',
-  'Dallas',
-  'Houston',
-  'Phoenix',
-  'San Diego',
-  'San Jose',
-  'Austin',
-  'Indianapolis',
-  'Columbus',
-  'Charlotte',
-  'Detroit'
-];
+      // Additional popular cities
+      'Doha',
+      'Abu Dhabi',
+      'Riyadh',
+      'Jeddah',
+      'Kuwait City',
+      'Manila',
+      'Jakarta',
+      'Hanoi',
+      'Taipei',
+      'Beijing',
+      'Shanghai',
+      'Hong Kong',
+      'New Delhi',
+      'Bangalore',
+      'Chennai',
+      'Hyderabad',
+      'Karachi',
+      'Lahore',
+      'Tehran',
+      'Cape Town',
+      'Johannesburg',
+      'Nairobi',
+      'Lagos',
+      'Casablanca',
+      'Addis Ababa',
+      'Tunis',
+      'Algiers',
+      'Sao Paulo',
+      'Rio de Janeiro',
+      'Buenos Aires',
+      'Lima',
+      'Bogotá',
+      'Santiago',
+      'Mexico City',
+      'Panama City',
+      'San Juan',
+      'Reykjavik',
+      'Helsinki',
+      'Oslo',
+      'Copenhagen',
+      'Stockholm',
+      'Zurich',
+      'Geneva',
+      'Brussels',
+      'Lisbon',
+      'Warsaw',
+      'Budapest',
+      'Athens',
+      'Florence',
+      'Venice',
+      'Valencia',
+      'Porto',
+      'Kiev',
+      'Moscow',
+      'Saint Petersburg',
+      'Tbilisi',
+      'Baku',
+      'Yerevan',
+      'Tashkent',
+      'Astana',
+      'Auckland',
+      'Wellington',
+      'Perth',
+      'Brisbane',
+      'Calgary',
+      'Ottawa',
+      'Edmonton',
+      'Quebec City',
+      'Philadelphia',
+      'Dallas',
+      'Houston',
+      'Phoenix',
+      'San Diego',
+      'San Jose',
+      'Austin',
+      'Indianapolis',
+      'Columbus',
+      'Charlotte',
+      'Detroit'
+    ];
 
     setState(() {
       _searchSuggestions = popularCities
@@ -335,31 +335,40 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: _buildAppBar(),
-      body: Stack(
-        children: [
-          BlocConsumer<WeatherCubit, WeatherStates>(
-            listener: (context, state) {
-              if (state is WeatherSuccessState) {
-                setState(() {
-                  weatherModel = BlocProvider.of<WeatherCubit>(
-                    context,
-                  ).weatherModel;
-                  location = weatherModel?.getFormattedLocation();
-                });
-              }
-            },
-            builder: (context, state) {
-              return AnimatedSwitcher(
-                duration: const Duration(milliseconds: 500),
-                transitionBuilder: (child, animation) {
-                  return FadeTransition(opacity: animation, child: child);
-                },
-                child: _buildStateWidget(state),
-              );
-            },
-          ),
-          _buildSearchOverlay(),
-        ],
+      body: RefreshIndicator(
+        color: Colors.black,
+        onRefresh: () async {
+          _triggerHapticFeedback();
+          if (cityName != null) {
+            return BlocProvider.of<WeatherCubit>(context).getWeather(cityName);
+          }
+        },
+        child: Stack(
+          children: [
+            BlocConsumer<WeatherCubit, WeatherStates>(
+              listener: (context, state) {
+                if (state is WeatherSuccessState) {
+                  setState(() {
+                    weatherModel = BlocProvider.of<WeatherCubit>(
+                      context,
+                    ).weatherModel;
+                    location = weatherModel?.getFormattedLocation();
+                  });
+                }
+              },
+              builder: (context, state) {
+                return AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 500),
+                  transitionBuilder: (child, animation) {
+                    return FadeTransition(opacity: animation, child: child);
+                  },
+                  child: _buildStateWidget(state),
+                );
+              },
+            ),
+            _buildSearchOverlay(),
+          ],
+        ),
       ),
     );
   }
@@ -382,16 +391,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
           onPressed: _toggleSearch,
         ),
-        if (!_isSearching)
-          IconButton(
-            icon: Icon(Icons.refresh, color: Colors.white.withOpacity(0.8)),
-            onPressed: () {
-              _triggerHapticFeedback();
-              if (cityName != null) {
-                BlocProvider.of<WeatherCubit>(context).getWeather(cityName);
-              }
-            },
-          ),
       ],
     );
   }
@@ -567,6 +566,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ),
       ),
       child: CustomScrollView(
+        physics: const ClampingScrollPhysics(),
         slivers: [
           SliverAppBar(
             backgroundColor: Colors.transparent,
