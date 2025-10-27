@@ -36,7 +36,8 @@ class Api {
     }
 
     Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+        locationSettings:
+            const LocationSettings(accuracy: LocationAccuracy.best));
 
     List<Placemark> placemark =
         await placemarkFromCoordinates(position.latitude, position.longitude);
