@@ -38,11 +38,14 @@ class Api {
     Position position = await Geolocator.getLastKnownPosition(
             forceAndroidLocationManager: true) ??
         await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.high);
+            locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.best,
+        ));
 
     List<Placemark> placemark =
         await placemarkFromCoordinates(position.latitude, position.longitude);
-
-    return placemark.isNotEmpty ? placemark[0].locality ?? "" : "";
+    debugPrint(
+        '  Current city: ${placemark.isNotEmpty ? placemark[0].locality : ""} ${placemark.isNotEmpty ? placemark[0].subLocality : ""}, lat: ${position.latitude}, long: ${position.longitude},lat: ${position.latitude} ');
+    return '${placemark.isNotEmpty ? placemark[0].subLocality : ""}, ${placemark.isNotEmpty ? placemark[0].locality : ""}';
   }
 }
