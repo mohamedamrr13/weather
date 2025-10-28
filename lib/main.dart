@@ -1,4 +1,3 @@
-import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather/cubits/weathercubit.dart';
@@ -27,11 +26,6 @@ class Weather extends StatelessWidget {
           fontFamily: 'SF Pro Display',
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: DevicePreview(
-          enabled: true,
-          builder: (BuildContext context) {
-            return const HomePage();
-          },
-        ));
+        home: const HomePage());
   }
 }
