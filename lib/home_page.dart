@@ -5,8 +5,6 @@ import 'package:weather/cubits/weathercubit.dart';
 import 'package:weather/cubits/weatherstates.dart';
 import 'package:weather/api/api.dart';
 import '../models/weathermodel.dart';
-
-// Refactored Widgets
 import 'widgets/home_page_widgets/home_page_app_bar.dart';
 import 'widgets/home_page_widgets/search_overlay.dart';
 import 'widgets/state_widgets/initial_widget.dart';
@@ -27,9 +25,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late AnimationController _fadeController;
   late AnimationController _slideController;
   late AnimationController _searchController;
+  late AnimationController _appBarController;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
   late Animation<double> _searchAnimation;
+  late Animation<Offset> _appBarSlideAnimation;
 
   final TextEditingController _searchTextController = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
@@ -37,6 +37,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   List<String> _searchHistory = [];
   List<String> _searchSuggestions = [];
   String? location;
+  bool _showAppBar = true;
 
   @override
   void initState() {
@@ -60,6 +61,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
+    _appBarController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+      value: 1.0, // Start visible
+    );
 
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _fadeController, curve: Curves.easeInOut),
@@ -72,6 +78,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     _searchAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _searchController, curve: Curves.easeInOut),
+    );
+
+    _appBarSlideAnimation = Tween<Offset>(
+      begin: const Offset(0, -1),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(parent: _appBarController, curve: Curves.easeInOut),
     );
   }
 
@@ -89,9 +102,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   void _generateSearchSuggestions(String query) {
-    // This list is large and should ideally be moved to a separate utility file or API call
-    // For now, keeping it here to avoid breaking the original logic flow.
-    // The list is truncated to keep this file under 200 lines.
     final popularCities = [
       'Alexandria',
       'New York',
@@ -237,7 +247,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   void _loadSearchHistory() {
-    // Placeholder for actual history loading logic
     _searchHistory = [];
   }
 
@@ -294,11 +303,27 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     HapticFeedback.lightImpact();
   }
 
+  // Callback for when scroll happens in SuccessWidget
+  void _onScrollChanged(bool isScrolled) {
+    if (isScrolled && _showAppBar) {
+      setState(() {
+        _showAppBar = false;
+      });
+      _appBarController.reverse();
+    } else if (!isScrolled && !_showAppBar) {
+      setState(() {
+        _showAppBar = true;
+      });
+      _appBarController.forward();
+    }
+  }
+
   @override
   void dispose() {
     _fadeController.dispose();
     _slideController.dispose();
     _searchController.dispose();
+    _appBarController.dispose();
     _searchTextController.dispose();
     _searchFocusNode.dispose();
     super.dispose();
@@ -312,8 +337,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       _slideController.forward();
       return SuccessWidget(
         weatherModel: weatherModel!,
-        fadeAnimation: _fadeAnimation,
         slideAnimation: _slideAnimation,
+        onScrollChanged: _onScrollChanged,
       );
     } else if (state is WeatherFailureState) {
       return ErrorWidgetCustom(
@@ -330,13 +355,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: HomePageAppBar(
-        isSearching: _isSearching,
-        getDisplayLocation: _getDisplayLocation,
-        toggleSearch: _toggleSearch,
-        searchTextController: _searchTextController,
-        searchFocusNode: _searchFocusNode,
-        searchWeather: _searchWeather,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: SlideTransition(
+          position: _appBarSlideAnimation,
+          child: HomePageAppBar(
+            isSearching: _isSearching,
+            getDisplayLocation: _getDisplayLocation,
+            toggleSearch: _toggleSearch,
+            searchTextController: _searchTextController,
+            searchFocusNode: _searchFocusNode,
+            searchWeather: _searchWeather,
+          ),
+        ),
       ),
       body: RefreshIndicator(
         color: Colors.black,

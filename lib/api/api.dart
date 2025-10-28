@@ -35,9 +35,10 @@ class Api {
           'Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    Position position = await Geolocator.getCurrentPosition(
-        locationSettings:
-            const LocationSettings(accuracy: LocationAccuracy.best));
+    Position position = await Geolocator.getLastKnownPosition(
+            forceAndroidLocationManager: true) ??
+        await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
 
     List<Placemark> placemark =
         await placemarkFromCoordinates(position.latitude, position.longitude);
