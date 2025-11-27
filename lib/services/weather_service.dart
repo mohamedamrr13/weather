@@ -16,5 +16,5 @@ class WeatherService {
     return model;
   }
 }
- //test :
- //http://api.weatherapi.com/v1/forecast.json?key=053148ffcc4241709de01810233107&q=Al Aagami, Alexandria
+//test :
+//http://api.weatherapi.com/v1/forecast.json?key=053148ffcc4241709de01810233107&q=Al Aagami, Alexandria

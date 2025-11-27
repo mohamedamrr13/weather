@@ -46,6 +46,6 @@ class Api {
         await placemarkFromCoordinates(position.latitude, position.longitude);
     debugPrint(
         '  Current city: ${placemark.isNotEmpty ? placemark[0].locality : ""} ${placemark.isNotEmpty ? placemark[0].subLocality : ""}, lat: ${position.latitude}, long: ${position.longitude},lat: ${position.latitude} ');
-    return '${placemark.isNotEmpty ? placemark[0].subLocality : ""}, ${placemark.isNotEmpty ? placemark[0].locality : ""}';
+    return '${placemark.isNotEmpty ? placemark[0].locality : ""}, ${placemark.isNotEmpty ? placemark[0].subLocality : ""}';
   }
 }
